@@ -610,6 +610,27 @@ main {
     align-items: center;
 }
 
+.about-text-p1 {
+    font-size: 1.1rem;
+    font-weight: 400;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.about-text-p2 {
+    font-size: 1.1rem;
+    font-weight: 400;
+    line-height: 1.6;
+    white-space: nowrap;
+}
+
+.desktop-br {
+    display: inline;
+}
+
 .avatar-wrapper {
     display: flex;
     justify-content: flex-end;
@@ -951,9 +972,19 @@ footer {
         align-items: center; 
     }
     
+    .about-text-p1, .about-text-p2 {
+        white-space: normal; /* Allow text to wrap on mobile */
+        text-align: left; /* Align left as per screenshot */
+        font-size: 1rem; /* Adjust font size for mobile */
+    }
+
+    .desktop-br {
+        display: none; /* Hide manual line breaks on mobile */
+    }
+    
     .about-grid p {
-        margin-bottom: 2rem; /* Add breathing room at bottom */
-        text-align: center; /* Ensure text is centered */
+        margin-bottom: 1rem; /* Reduce bottom margin on mobile */
+        text-align: left; /* Ensure text is left aligned */
     }
     
     /* Reorder items in about grid: Title is outside, but avatar is inside grid */
