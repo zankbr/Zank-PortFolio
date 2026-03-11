@@ -715,6 +715,7 @@ footer {
     backdrop-filter: blur(4px);
     transition: opacity 0.4s ease;
     z-index: 2;
+    pointer-events: none;
 }
 
 .spoiler-overlay span {
