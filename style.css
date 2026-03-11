@@ -101,7 +101,8 @@ main {
 
 /* Hero Section */
 .hero {
-    padding: 6rem 0;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--grid-gap);
@@ -112,11 +113,11 @@ main {
 /* Desktop alignment adjustment */
 @media (min-width: 769px) {
     .hero-title {
-        margin-left: 20px; /* Adjusted to move right by 20px */
+        margin-left: 0; /* Align with container padding */
     }
     
     .logo {
-        margin-left: 20px; /* Align logo with hero-title */
+        margin-left: 0; /* Align with container padding */
     }
 }
 
@@ -186,7 +187,7 @@ main {
     /* User update: "是这两排字的底部和不止于此的底部对齐" - "Align bottom of these two lines with bottom of 'Not Just This'" */
     /* Currently align-self: end does this for the block. */
     /* If the font line-height causes visual misalignment, we might need a small negative margin-bottom. */
-    margin-bottom: 18px; /* Significantly increased to move paragraph higher up */
+    margin-bottom: 2rem; /* Align with .hero-title margin-bottom */
 }
 
 .hero-bio p {
@@ -194,8 +195,8 @@ main {
     line-height: 1.5;
     margin-top: 0;
     max-width: 400px; 
-    /* Add left margin to match title's visual offset if requested */
-    margin-left: 4px; /* Match the 4px added to .hero-title */
+    /* Remove left margin to align with title and grid */
+    margin-left: 0;
 }
 
 /* Portfolio Grid */
@@ -203,11 +204,36 @@ main {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: var(--grid-gap);
-    margin: 0 auto;
-    justify-items: center;
-    justify-content: center;
-    padding: 0 2rem;
+    margin: 0;
+    justify-items: stretch;
+    justify-content: start;
+    padding: 0;
     margin-bottom: 6rem;
+}
+
+/* Fixed height for Desktop (1025px and above) */
+@media (min-width: 1025px) {
+    .project-card {
+        height: 525px;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .project-card > div:first-child {
+        flex: 1;
+        overflow: hidden;
+    }
+    
+    .card-image {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        aspect-ratio: auto !important;
+    }
+    
+    .card-info {
+        flex-shrink: 0;
+    }
 }
 
 /* For extreme narrow screens (340px and below) */
@@ -229,7 +255,7 @@ main {
 @media (min-width: 769px) and (max-width: 1024px) {
     .portfolio-grid {
         grid-template-columns: repeat(3, 1fr) !important;
-        padding: 0 2rem !important;
+        padding: 0 !important;
     }
 }
 
@@ -565,7 +591,8 @@ main {
 
 /* About Section */
 .about-section {
-    padding: 6rem 0;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
     border-top: 2px solid var(--border-color);
     margin-top: 6rem;
 }
@@ -657,6 +684,67 @@ footer {
 .contact-email {
     font-size: 2rem;
     font-weight: 700;
+    transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+/* Telegram-style Spoiler Effect */
+.email-spoiler-wrapper {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.contact-email.spoiler-hidden {
+    filter: blur(12px);
+    opacity: 0.3;
+    pointer-events: none; /* Disable mailto link while hidden */
+    user-select: none;
+}
+
+.spoiler-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center horizontally */
+    background: transparent; /* Remove white background */
+    backdrop-filter: blur(4px);
+    transition: opacity 0.4s ease;
+    z-index: 2;
+}
+
+.spoiler-overlay span {
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    color: #ffffff; /* Changed from blue to white */
+    opacity: 0.8; /* Increased opacity for better readability on blur */
+    background: transparent;
+    padding: 4px 12px;
+    border: none;
+    text-transform: uppercase;
+    animation: pulse-opacity 2s infinite;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Added a subtle shadow to pop against light backgrounds */
+}
+
+@keyframes pulse-opacity {
+    0% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+    100% { opacity: 0.4; }
+}
+
+.email-spoiler-wrapper.revealed .spoiler-overlay {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.email-spoiler-wrapper.revealed .contact-email {
+    filter: blur(0);
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .social-links {
@@ -945,6 +1033,17 @@ footer {
         flex-direction: column;
         gap: 2rem;
         text-align: center;
+    }
+
+    /* Adjust Email Spoiler for Mobile */
+    .contact-email {
+        font-size: clamp(1.2rem, 6vw, 1.8rem); /* Scale down font size for mobile */
+    }
+
+    .spoiler-overlay span {
+        font-size: 0.75rem; /* Smaller hint text for mobile */
+        padding: 4px 8px;
+        white-space: nowrap;
     }
 }
 
