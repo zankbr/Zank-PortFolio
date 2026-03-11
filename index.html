@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZANKB | DESIGN PORTFOLIO</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <a href="index.html">ZANK<span style="color: var(--accent-color);">.</span>PORTFOLIO</a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页 <span class="en-text">HOMEPAGE</span></a></li>
+                    <li><a href="#works">作品 <span class="en-text">WORKS</span></a></li>
+                    <li><a href="#about">关于我 <span class="en-text">ABOUT ME</span></a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Mini Sticky Header for Mobile -->
+    <div class="mini-header mobile-only">
+        <div class="mini-nav">
+            <a href="index.html">首页</a>
+            <a href="#works">作品</a>
+            <a href="#about">关于我</a>
+        </div>
+    </div>
+
+    <main>
+        <section class="container hero reveal">
+            <div class="hero-title">
+                <h1>设计与 <span class="highlight-blue">AI</span><br><span class="highlight-blue">同</span>频<br>创见<br><span class="highlight-blue">不止</span>于此。</h1>
+                <a href="detail.html?id=999" class="hidden-entry">
+                    <span>&gt;</span><span>&gt;</span><span>&gt;</span>
+                </a>
+            </div>
+            <div class="hero-bio">
+                <p>专注于本质。消除冗余。<br>创造功能性、几何感且永恒的数字体验。</p>
+            </div>
+        </section>
+
+        <section id="works" class="container reveal">
+            <div class="portfolio-grid" id="portfolio-grid">
+                <!-- 作品项将通过 JS 注入 -->
+            </div>
+        </section>
+        
+        <section id="about" class="container reveal about-section">
+             <h2 class="about-title">关于我</h2>
+             <div class="about-grid">
+                 <p style="font-size: 1.2rem; font-weight: 400; line-height: 1.6;">
+                     我是一名深耕数字设计领域的资深设计师，坚信 网格系统、严谨排版与负空间 是优质视觉体验的核心。<br><br>
+                     从业多年，先后任职于天猫平台、京东平台等头部电商旗舰店，始终专注探索数字时代「 形式追随功能 」的设计表达。主动拥抱行业技术革新，从 C4D 三维视觉创作，到 AI 智能设计赋能，持续以理性秩序与前沿工具，打造兼具商业价值与视觉质感的数字设计作品。
+                 </p>
+                 <div class="avatar-wrapper">
+                     <img src="avatar.png" alt="我的头像" class="avatar-img" onerror="this.src='https://api.dicebear.com/9.x/avataaars/svg?seed=Felix&top=shortHair&style=circle'; this.onerror=null;">
+                     <div class="avatar-hover-text">
+                         <span class="avatar-name-cn">邹鉴锟</span>
+                         <span class="avatar-name-en">(Zank)</span>
+                     </div>
+                 </div>
+             </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <div>
+                <p style="margin-bottom: 1rem; opacity: 0.7;">联系我</p>
+                <a href="mailto:zank6r@gmail.com" class="contact-email">ZANK6R@GMAIL.COM</a>
+            </div>
+            <div class="social-links">
+                <a href="#">PHONE</a>
+                <a href="#">WECHAT</a>
+                <a href="#">TIKTOK</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="data.js?v=1.1"></script>
+    <script src="script.js?v=1.1"></script>
+</body>
+</html>

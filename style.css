@@ -1,0 +1,1019 @@
+:root {
+    --bg-color: #ffffff;
+    --text-color: #1a1a1a;
+    --accent-color: #0000ff;
+    --border-color: #1a1a1a;
+    --secondary-bg: #eeeeee;
+    --grid-gap: 2rem;
+    --transition-speed: 0.3s;
+    --container-width: 1400px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', 'Helvetica Neue', 'Arial', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.5;
+    font-weight: 700; /* Bold as requested */
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: color var(--transition-speed) ease;
+}
+
+/* Grid System */
+.container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* Header */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: var(--bg-color);
+    border-bottom: 2px solid var(--border-color);
+    z-index: 1000;
+    padding: 1.5rem 0;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 3rem;
+    list-style: none;
+}
+
+.nav-links a {
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    position: relative;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--accent-color);
+    transition: width var(--transition-speed) ease;
+}
+
+.nav-links a:hover {
+    color: var(--accent-color);
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* Main Content */
+main {
+    margin-top: 120px;
+    min-height: 100vh;
+}
+
+/* Hero Section */
+.hero {
+    padding: 6rem 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--grid-gap);
+    border-bottom: 2px solid var(--border-color);
+    margin-bottom: 4rem;
+}
+
+/* Desktop alignment adjustment */
+@media (min-width: 769px) {
+    .hero-title {
+        margin-left: 20px; /* Adjusted to move right by 20px */
+    }
+    
+    .logo {
+        margin-left: 20px; /* Align logo with hero-title */
+    }
+}
+
+.hero-title {
+    margin-bottom: 2rem;
+    position: relative; /* For absolute positioning of hidden entry */
+    display: flex;
+    align-items: center; /* Align arrows with text */
+}
+
+.hero-title h1 {
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    line-height: 1.1;
+    font-weight: 700;
+    margin-bottom: 0; /* Remove bottom margin as flex container handles spacing */
+    position: relative;
+    display: inline-block;
+}
+
+/* Hidden Entry Arrow */
+.hidden-entry {
+    display: inline-flex;
+    margin-left: 2rem;
+    text-decoration: none;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent-color); /* Cyan/Light Blue */
+    cursor: pointer;
+    align-self: center; /* Center vertically */
+}
+
+.hidden-entry span {
+    animation: flow-opacity 1.5s infinite;
+    color: var(--accent-color); /* Bauhaus Blue */
+}
+
+.hidden-entry span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.hidden-entry span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.hidden-entry span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes flow-opacity {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+}
+
+/* Highlight Text */
+.highlight-blue {
+    color: var(--accent-color);
+}
+
+.hero-bio {
+    position: relative;
+    /* Default (Desktop): Align to bottom right of the hero section */
+    /* Use align-self: end to align the block to the bottom of the grid cell */
+    align-self: end; 
+    margin-top: 0; /* Reset margin */
+    /* Add padding to align with title text visually if needed, but grid gap handles main separation */
+    /* User request: "p 右移与 h1 它与左边的距离相同" - Align left padding? */
+    /* User update: "是这两排字的底部和不止于此的底部对齐" - "Align bottom of these two lines with bottom of 'Not Just This'" */
+    /* Currently align-self: end does this for the block. */
+    /* If the font line-height causes visual misalignment, we might need a small negative margin-bottom. */
+    margin-bottom: 18px; /* Significantly increased to move paragraph higher up */
+}
+
+.hero-bio p {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-top: 0;
+    max-width: 400px; 
+    /* Add left margin to match title's visual offset if requested */
+    margin-left: 4px; /* Match the 4px added to .hero-title */
+}
+
+/* Portfolio Grid */
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--grid-gap);
+    margin: 0 auto;
+    justify-items: center;
+    justify-content: center;
+    padding: 0 2rem;
+    margin-bottom: 6rem;
+}
+
+/* For extreme narrow screens (340px and below) */
+@media (max-width: 340px) {
+    .portfolio-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* For mobile devices (max-width: 768px) */
+@media (max-width: 768px) {
+    .portfolio-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.8rem !important;
+    }
+}
+
+/* For tablet devices (769px to 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .portfolio-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        padding: 0 2rem !important;
+    }
+}
+
+/* For large PC screens (1200px and above) */
+@media (min-width: 1200px) {
+    .portfolio-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+.project-card {
+    background: var(--bg-color);
+    border: 2px solid var(--border-color);
+    overflow: hidden;
+    position: relative;
+    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease, border-color var(--transition-speed) ease;
+    cursor: pointer;
+    width: 100%;
+}
+
+.project-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 10px 10px 0px var(--border-color);
+    border-color: var(--accent-color);
+    z-index: 10;
+}
+
+.card-image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    filter: grayscale(100%);
+    transition: filter var(--transition-speed) ease;
+}
+
+.project-card:hover .card-image {
+    filter: grayscale(0%);
+}
+
+.card-overlay-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(1rem, 3.5vw, 2.2rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    color: inherit;
+    pointer-events: none;
+    text-align: center;
+    width: 90%;
+    line-height: 1.1;
+    z-index: 5;
+}
+
+/* Ensure text color adapts to background */
+.project-card[data-theme="dark"] .card-overlay-text {
+    color: #ffffff;
+}
+
+.project-card[data-theme="light"] .card-overlay-text {
+    color: #1a1a1a;
+}
+
+.card-info {
+    padding: 1.5rem;
+    border-top: 2px solid var(--border-color);
+    background: var(--bg-color);
+}
+
+.card-title {
+    font-size: clamp(0.9rem, 2.5vw, 1.3rem);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.card-category {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+/* Detail Page Styles */
+.detail-header {
+    margin-bottom: 4rem;
+    margin-top: 14rem; /* Increased from 8rem to prevent overlap with fixed header */
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 2rem;
+}
+
+.detail-title {
+    font-size: 4rem;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+.detail-meta {
+    display: flex;
+    gap: 4rem;
+    font-size: 1rem;
+    text-transform: uppercase;
+    color: #666;
+    font-weight: 400;
+}
+
+/* Updated Detail Layout with Interaction */
+.detail-content {
+    display: block; 
+    position: relative;
+    margin-bottom: 6rem;
+}
+
+.detail-gallery {
+    margin-top: 4rem;
+    column-count: 3; /* Force 3 columns */
+    column-gap: 1.5rem; /* Reduce gap slightly for tighter layout */
+    width: 100%; /* Ensure full width usage */
+}
+
+.detail-image-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 1.5rem; /* Match column gap for consistency */
+    break-inside: avoid;
+    display: inline-block;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: zoom-in;
+}
+
+.detail-image-wrapper img {
+    width: 100%;
+    display: block;
+    transition: filter 0.3s ease;
+}
+
+.detail-info-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; /* Full width for gallery items */
+    height: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 1.5rem; /* Default padding */
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start; /* Align text to left, but container is centered vertically */
+    z-index: 10;
+    text-align: left; /* Reset text alignment */
+    overflow-y: auto; /* Allow scrolling if content is too long */
+}
+
+.detail-info-content {
+    max-width: 100%;
+    width: 100%;
+    /* Add logic to center content vertically if needed, or keep it distributed */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+/* Desktop Hover Effect */
+@media (min-width: 769px) {
+    .detail-image-wrapper:hover .detail-info-overlay {
+        opacity: 1;
+    }
+    
+    .detail-image-wrapper:hover img {
+        filter: blur(5px) grayscale(50%);
+    }
+}
+
+.detail-info-overlay h3 {
+    font-size: 1.2rem; /* Slightly smaller for gallery */
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    border-left: 3px solid var(--accent-color);
+    padding-left: 0.8rem;
+    margin-top: 1rem; /* Add spacing between sections */
+}
+
+.detail-info-overlay h3:first-child {
+    margin-top: 0;
+}
+
+.detail-info-overlay p {
+    font-size: 0.9rem; /* Slightly smaller for gallery */
+    font-weight: 400;
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+    color: #333;
+    max-width: 100%; /* Ensure text doesn't overflow */
+}
+
+/* Responsive Overlay Padding */
+@media (max-width: 1400px) {
+    .detail-info-overlay {
+        padding: 1.2rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .detail-info-overlay {
+        padding: 1rem;
+    }
+    
+    .detail-info-overlay h3 {
+        font-size: 1.1rem;
+        padding-left: 0.6rem;
+    }
+    
+    .detail-info-overlay p {
+        font-size: 0.85rem;
+    }
+}
+
+/* Mobile: Responsive columns */
+@media (max-width: 768px) {
+    /* For iPhone SE and similar small phones */
+    .detail-gallery {
+        column-count: 2;
+        margin-top: 2rem;
+        column-gap: 1rem;
+    }
+    
+    /* For iPad and larger tablets */
+    @media (min-width: 600px) {
+        .detail-gallery {
+            column-count: 3;
+        }
+    }
+    
+    .detail-image-wrapper {
+        margin-bottom: 1rem;
+        width: 100%;
+        display: inline-block;
+        break-inside: avoid;
+    }
+
+    .detail-info-overlay {
+        display: none !important;
+    }
+}
+
+/* Color Palette Styles */
+.color-palette-section {
+    margin-top: 1rem;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    padding-top: 1rem;
+}
+
+.color-palette-container {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.color-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.color-swatch {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.color-code {
+    font-size: 0.7rem;
+    font-family: monospace;
+    color: #666;
+}
+.lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.lightbox.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.lightbox img,
+.lightbox video {
+    display: block; /* Ensure block layout */
+    max-width: 90vw !important; /* Force override */
+    max-height: 90vh !important; /* Force override */
+    width: auto !important; /* Let aspect ratio decide */
+    height: auto !important; /* Let aspect ratio decide */
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    margin: auto; /* Center in flex container */
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    color: white;
+    font-size: 3rem;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.lightbox-close:hover {
+    color: var(--accent-color);
+}
+
+
+/* About Section */
+.about-section {
+    padding: 6rem 0;
+    border-top: 2px solid var(--border-color);
+    margin-top: 6rem;
+}
+
+.about-title {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.avatar-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    position: relative;
+    width: 200px; /* Match image width */
+    height: 200px; /* Match image height */
+    border-radius: 50%;
+    overflow: hidden;
+    margin-left: auto; /* Align to right */
+    border: 2px solid var(--border-color);
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.3s ease;
+}
+
+.avatar-hover-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--accent-color);
+    color: #ffffff;
+    display: flex;
+    flex-direction: column; /* Stack vertically */
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.avatar-name-cn {
+    font-size: 2rem; /* Larger font size */
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+}
+
+.avatar-name-en {
+    font-size: 1.2rem; /* Smaller font size */
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+.avatar-wrapper:hover .avatar-img {
+    opacity: 0;
+}
+
+.avatar-wrapper:hover .avatar-hover-text {
+    opacity: 1;
+}
+
+/* Footer */
+footer {
+    border-top: 2px solid var(--border-color);
+    padding: 4rem 0;
+    background: var(--text-color);
+    color: var(--bg-color);
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.contact-email {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.social-links {
+    display: flex;
+    gap: 2rem;
+}
+
+/* Ripple Effect */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(0, 0, 255, 0.3);
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* Scroll Reveal */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .container {
+        padding: 0 2rem; /* Keep 2rem for better gap */
+    }
+    .hero-title h1 {
+        font-size: 3.5rem;
+    }
+}
+
+/* Hide mini header on desktop */
+.mini-header {
+    display: none;
+}
+
+/* Mobile Styles Consolidation */
+@media (max-width: 768px) {
+    /* Container Padding */
+    .container {
+        padding: 0 1.5rem;
+    }
+
+    header .container {
+        padding: 1rem 1.5rem;
+    }
+
+    /* Hero Section */
+    .hero {
+        grid-template-columns: 1fr;
+        padding: 3rem 0;
+        gap: 2rem;
+    }
+    
+    .container.hero {
+        padding-top: 2rem;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+
+    .hero-title {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+        margin-top: 6rem;
+    }
+
+    .hero-bio {
+        font-size: 1.1rem;
+        position: relative;
+        margin-top: 0.5rem;
+        text-align: left;
+        align-items: flex-start;
+    }
+    
+    .hero-bio p {
+        margin-left: 4px;
+        text-align: left;
+        margin: 0;
+    }
+
+    /* Hidden Entry Arrow Position */
+    .hidden-entry {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-20%);
+        margin-left: 0;
+    }
+
+    /* Header & Navigation */
+    nav {
+        padding: 0;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .logo {
+        margin-bottom: 0;
+    }
+
+    .nav-links {
+        display: flex !important;
+        flex-direction: row !important;
+        /* Responsive gap using clamp: min 0.5rem, pref 4vw, max 1.5rem */
+        gap: clamp(0.5rem, 4vw, 1.5rem) !important; 
+        font-size: 0.85rem;
+        width: 100% !important;
+        justify-content: center !important; /* Center the whole group */
+        margin: 0;
+        padding-left: 0;
+        overflow: hidden; /* For collapse transition */
+        max-height: 100px; /* Initial max height */
+        transition: max-height 0.3s ease, opacity 0.3s ease, margin 0.3s ease;
+        opacity: 1;
+        flex-wrap: wrap; /* Allow wrapping on very small screens if absolutely necessary */
+    }
+
+    .nav-links li {
+        flex: 0 1 auto; /* Allow shrinking but not growing too much */
+        display: flex;
+        justify-content: center;
+        min-width: 0; /* Allow flex item to shrink below content size if needed (rarely) */
+    }
+
+    .nav-links li a {
+        /* Responsive font size: min 0.75rem, pref 3.5vw, max 0.9rem */
+        font-size: clamp(0.75rem, 3.5vw, 0.9rem); 
+        display: inline-flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.3rem;
+        line-height: 1.2;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .nav-links li a span.en-text {
+        /* Responsive small font: min 0.6rem, pref 3vw, max 0.8rem */
+        font-size: clamp(0.6rem, 3vw, 0.8rem);
+        opacity: 1;
+        text-transform: uppercase;
+    }
+
+    /* Header Scroll Logic */
+    header {
+        transition: padding 0.3s ease;
+    }
+    
+    header.header-collapsed {
+        padding: 0.8rem 0; /* Shrink header padding */
+    }
+
+    header.header-collapsed .nav-links {
+        max-height: 0 !important; /* Collapse height */
+        opacity: 0 !important;
+        margin: 0 !important;
+        pointer-events: none;
+        overflow: hidden !important; /* Ensure content is clipped */
+    }
+    
+    header.header-collapsed nav {
+        gap: 0; /* Remove gap when collapsed */
+    }
+
+    /* Disable Mini Header */
+    .mini-header {
+        display: none !important;
+    }
+    
+    /* Portfolio Grid for Mobile */
+    .project-card {
+        margin: 0 auto;
+        max-width: 100%;
+    }
+    
+    .card-info {
+        text-align: center;
+    }
+    
+    /* Other Mobile Adjustments */
+    .about-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        display: flex;
+        flex-direction: column-reverse; /* Put avatar on top (visual order), or keep grid and reorder */
+        /* Better: Keep grid but change order */
+        align-items: center; 
+    }
+    
+    .about-grid p {
+        margin-bottom: 2rem; /* Add breathing room at bottom */
+        text-align: center; /* Ensure text is centered */
+    }
+    
+    /* Reorder items in about grid: Title is outside, but avatar is inside grid */
+    /* Wait, structure is Title -> Grid(Text, Avatar) */
+    
+    .about-title {
+        font-size: 2.5rem;
+        text-align: center; /* Center align title */
+    }
+
+    .avatar-wrapper {
+        justify-content: center;
+        width: 150px; /* Enlarge avatar */
+        height: 150px;
+        margin: 0 auto; /* Center avatar */
+        position: relative; /* Ensure relative for absolute children */
+        border-radius: 50%; /* Force circular shape */
+        overflow: hidden; /* Clip everything to circle */
+        -webkit-mask-image: -webkit-radial-gradient(white, black); /* Fix for Safari border-radius overflow */
+    }
+
+    .avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 1 !important; /* Always visible unless overlay is on top */
+    }
+    
+    .avatar-hover-text {
+        position: absolute; /* Ensure absolute positioning */
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        bottom: auto !important;
+        right: auto !important;
+        transform: none !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--accent-color); /* Ensure background is set */
+        border-radius: 50%; /* Ensure it's circular */
+        opacity: 0; /* Hidden by default */
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+    
+    .avatar-wrapper.mobile-active .avatar-hover-text {
+        opacity: 1 !important; /* Force visible on mobile active */
+        pointer-events: auto !important;
+    }
+    
+    /* Completely disable hover effects on mobile */
+    .avatar-wrapper:hover .avatar-img {
+        opacity: 1 !important; /* Keep image visible on hover */
+    }
+
+    .avatar-wrapper:hover .avatar-hover-text {
+        opacity: 0; /* Keep text hidden on hover unless active */
+    }
+    
+    /* Only show text if active class is present */
+    .avatar-wrapper.mobile-active .avatar-hover-text {
+        opacity: 1 !important;
+    }
+
+    .detail-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .detail-title {
+        font-size: 2.5rem;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 2rem;
+        text-align: center;
+    }
+}
+
+/* For mobile devices */
+@media (max-width: 768px) {
+    /* For larger mobile devices like iPhone 16 and 16 Pro */
+    @media (min-width: 480px) {
+        .portfolio-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 1.5rem !important;
+        }
+        
+        /* Staggered coloring for 2-column layout */
+        /* First row: black, white */
+        /* Second row: white, black */
+        /* Third row: black, white */
+        .project-card:nth-child(4n+1),
+        .project-card:nth-child(4n+4) {
+            background-color: #000000 !important;
+        }
+        
+        .project-card:nth-child(4n+2),
+        .project-card:nth-child(4n+3) {
+            background-color: #ffffff !important;
+        }
+        
+        /* Ensure text color adapts */
+        .project-card:nth-child(4n+1) .card-overlay-text,
+        .project-card:nth-child(4n+4) .card-overlay-text {
+            color: #ffffff !important;
+        }
+        
+        .project-card:nth-child(4n+2) .card-overlay-text,
+        .project-card:nth-child(4n+3) .card-overlay-text {
+            color: #1a1a1a !important;
+        }
+        
+        /* Ensure card-info background matches */
+        .project-card:nth-child(4n+1) .card-info,
+        .project-card:nth-child(4n+4) .card-info {
+            background-color: #000000 !important;
+            color: #ffffff !important;
+            border-top-color: #ffffff !important;
+        }
+        
+        .project-card:nth-child(4n+2) .card-info,
+        .project-card:nth-child(4n+3) .card-info {
+            background-color: #ffffff !important;
+            color: #1a1a1a !important;
+            border-top-color: #1a1a1a !important;
+        }
+        
+        /* Ensure category text color adapts */
+        .project-card:nth-child(4n+1) .card-category,
+        .project-card:nth-child(4n+4) .card-category {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+        
+        .project-card:nth-child(4n+2) .card-category,
+        .project-card:nth-child(4n+3) .card-category {
+            color: #666 !important;
+        }
+    }
+    
+    /* For small mobile devices like iPhone SE */
+    @media (max-width: 479px) {
+        .portfolio-grid {
+            grid-template-columns: 1fr !important;
+            gap: 1.5rem !important;
+        }
+    }
+}
