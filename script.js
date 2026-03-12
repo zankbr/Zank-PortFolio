@@ -63,6 +63,32 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update page title dynamically
             document.title = `${project.title} | ZANKB DESIGN`;
             
+            // 1. Sort images logic
+            // Determine columns based on CSS breakpoints
+            let columns = 3;
+            if (window.innerWidth < 600) {
+                columns = 2;
+            }
+            
+            // Reorder images for "Masonry-like" visual distribution
+            // CSS column-count fills vertically (Col 1 -> Col 2 -> Col 3)
+            // We want visual horizontal order (Item 1 -> Top Left, Item 2 -> Top Center/Right...)
+            // So we need to distribute index 0, 3, 6 to Col 1; 1, 4, 7 to Col 2; etc.
+            const reorderedImages = [];
+            if (project.images && project.images.length > 0) {
+                // Distribute to columns buckets
+                const cols = Array.from({ length: columns }, () => []);
+                
+                project.images.forEach((img, index) => {
+                    cols[index % columns].push(img);
+                });
+                
+                // Concatenate columns to match CSS flow order
+                cols.forEach(col => {
+                    reorderedImages.push(...col);
+                });
+            }
+
             detailContainer.innerHTML = `
                 <div class="detail-header reveal">
                     <h1 class="detail-title">${project.title}</h1>
@@ -73,22 +99,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 <div class="detail-content reveal">
                     <div class="detail-gallery">
-                        ${project.images.map(img => {
+                        ${reorderedImages.map(img => {
                             const isVideo = img.toLowerCase().endsWith('.mp4') || img.toLowerCase().endsWith('.webm');
                             const isGif = img.toLowerCase().endsWith('.gif');
-                            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                            // User requirement: "视频预览图必须保持 WebP/图片格式，严禁改成 MP4！"
+                            // So we always use image tag for preview, with data-video-src for lightbox
                             
                             let mediaElement;
                             if (isVideo) {
-                                // For mobile, use webp format if available
-                                if (isMobile) {
-                                    const webpPath = img.replace(/\.(mp4|webm)$/i, '.webp');
-                                    // Store original video path in data attribute
-                                    mediaElement = `<img src="${webpPath}" data-video-src="${img}" alt="项目视频预览" style="width:100%; display:block;">`;
-                                } else {
-                                    // For desktop, use original video
-                                    mediaElement = `<video src="${img}" autoplay loop muted playsinline style="width:100%; display:block;"></video>`;
-                                }
+                                const webpPath = img.replace(/\.(mp4|webm)$/i, '.webp');
+                                mediaElement = `<img src="${webpPath}" data-video-src="${img}" alt="项目视频预览" style="width:100%; display:block;">`;
                             } else if (isGif) {
                                 // Always show GIFs as images
                                 mediaElement = `<img src="${img}" alt="项目动图" style="width:100%; display:block;">`;
