@@ -380,8 +380,9 @@ main {
 .detail-image-wrapper {
     position: relative;
     width: 100%;
-    /* margin-bottom removed, using flex gap instead */
-    display: block; /* Changed from inline-block for flex layout */
+    margin-bottom: 1.5rem; /* Match column gap for consistency */
+    break-inside: avoid;
+    display: inline-block;
     border: 2px solid var(--border-color);
     border-radius: 12px;
     overflow: hidden;

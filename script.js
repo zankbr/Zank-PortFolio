@@ -60,12 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const project = portfolioData.find(p => p.id === projectId);
 
         if (project) {
-            console.log('Rendering project:', project.title, 'with', project.images.length, 'images');
             // Update page title dynamically
             document.title = `${project.title} | ZANKB DESIGN`;
-            
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            const numColumns = isMobile ? (window.innerWidth < 600 ? 2 : 3) : 3;
             
             detailContainer.innerHTML = `
                 <div class="detail-header reveal">
@@ -75,86 +71,82 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
 
-                <div class="detail-content">
-                    <div class="waterfall-container" style="display: flex; gap: 1.5rem;">
-                        ${Array.from({ length: numColumns }, (_, i) => `<div class="waterfall-column" style="flex: 1; display: flex; flex-direction: column; gap: 1.5rem;"></div>`).join('')}
+                <div class="detail-content reveal">
+                    <div class="detail-gallery">
+                        ${project.images.map(img => {
+                            const isVideo = img.toLowerCase().endsWith('.mp4') || img.toLowerCase().endsWith('.webm');
+                            const isGif = img.toLowerCase().endsWith('.gif');
+                            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                            
+                            let mediaElement;
+                            if (isVideo) {
+                                // For mobile, use webp format if available
+                                if (isMobile) {
+                                    const webpPath = img.replace(/\.(mp4|webm)$/i, '.webp');
+                                    // Store original video path in data attribute
+                                    mediaElement = `<img src="${webpPath}" data-video-src="${img}" alt="项目视频预览" style="width:100%; display:block;">`;
+                                } else {
+                                    // For desktop, use original video
+                                    mediaElement = `<video src="${img}" autoplay loop muted playsinline style="width:100%; display:block;"></video>`;
+                                }
+                            } else if (isGif) {
+                                // Always show GIFs as images
+                                mediaElement = `<img src="${img}" alt="项目动图" style="width:100%; display:block;">`;
+                            } else {
+                                mediaElement = `<img src="${img}" alt="项目详情图">`;
+                            }
+                                
+                            return `
+                            <div class="detail-image-wrapper">
+                                ${mediaElement}
+                                <div class="detail-info-overlay">
+                                    <div class="detail-info-content">
+                                        <h3>项目介绍</h3>
+                                        <p>${project.description}</p>
+                                        
+                                        <h3>设计理念</h3>
+                                        <p>${project.concept}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `}).join('')}
                     </div>
                 </div>
             `;
 
-            const columns = detailContainer.querySelectorAll('.waterfall-column');
-            const columnHeights = Array(numColumns).fill(0);
-
-            // Sort images by number in filename (e.g., "img (1).jpg", "img (10).jpg")
-            const sortedImages = [...project.images].sort((a, b) => {
-                const numA = parseInt(a.match(/\((\d+)\)/)?.[1] || 0);
-                const numB = parseInt(b.match(/\((\d+)\)/)?.[1] || 0);
-                return numA - numB;
-            });
-
-            sortedImages.forEach((img, idx) => {
-                const isVideo = img.toLowerCase().endsWith('.mp4') || img.toLowerCase().endsWith('.webm');
-                const isGif = img.toLowerCase().endsWith('.gif');
-                
-                let mediaElement;
-                if (isVideo) {
-                    if (isMobile) {
-                        const webpPath = img.replace(/\.(mp4|webm)$/i, '.webp');
-                        mediaElement = `<img src="${webpPath}" data-video-src="${img}" alt="项目视频预览" style="width:100%; display:block;">`;
-                    } else {
-                        mediaElement = `<video src="${img}" autoplay loop muted playsinline style="width:100%; display:block;"></video>`;
-                    }
-                } else if (isGif) {
-                    mediaElement = `<img src="${img}" alt="项目动图" style="width:100%; display:block;">`;
-                } else {
-                    mediaElement = `<img src="${img}" alt="项目详情图" loading="lazy">`;
-                }
-
-                const wrapper = document.createElement('div');
-                wrapper.className = 'detail-image-wrapper reveal';
-                wrapper.innerHTML = `
-                    ${mediaElement}
-                    <div class="detail-info-overlay">
-                        <div class="detail-info-content">
-                            <h3>项目介绍</h3>
-                            <p>${project.description || ''}</p>
-                            <h3>设计理念</h3>
-                            <p>${project.concept || ''}</p>
-                        </div>
-                    </div>
-                `;
-
-                // Find the shortest column
-                const shortestColumnIndex = columnHeights.indexOf(Math.min(...columnHeights));
-                columns[shortestColumnIndex].appendChild(wrapper);
-                
-                // Estimate height (approximate since images aren't loaded yet)
-                // This is a simplified estimation; for perfect results, we'd wait for image loads.
-                columnHeights[shortestColumnIndex] += 1; 
-            });
-
-            // Lightbox functionality remains same
+            // Lightbox functionality
             const lightbox = document.createElement('div');
             lightbox.className = 'lightbox';
             lightbox.innerHTML = '<span class="lightbox-close">&times;</span><div class="lightbox-content"></div>';
             document.body.appendChild(lightbox);
+
             const lightboxContent = lightbox.querySelector('.lightbox-content');
             const closeBtn = lightbox.querySelector('.lightbox-close');
 
             const closeLightbox = () => {
                 lightbox.classList.remove('active');
-                setTimeout(() => { if (lightbox.parentNode) lightbox.parentNode.removeChild(lightbox); }, 300);
+                setTimeout(() => {
+                    if (lightbox.parentNode) {
+                        lightbox.parentNode.removeChild(lightbox);
+                    }
+                }, 300);
             };
 
             closeBtn.addEventListener('click', closeLightbox);
-            lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+            lightbox.addEventListener('click', (e) => {
+                if (e.target === lightbox) closeLightbox();
+            });
 
-            detailContainer.addEventListener('click', (e) => {
-                const wrapper = e.target.closest('.detail-image-wrapper');
-                if (wrapper) {
+            // Add Click Interaction for all gallery items
+            const imageWrappers = document.querySelectorAll('.detail-image-wrapper');
+            imageWrappers.forEach(wrapper => {
+                wrapper.addEventListener('click', (e) => {
+                    // For all devices, open lightbox directly
                     const video = wrapper.querySelector('video');
                     const img = wrapper.querySelector('img');
-                    lightboxContent.innerHTML = '';
+                    
+                    lightboxContent.innerHTML = ''; // Clear previous content
+                    
                     if (video) {
                         const newVideo = document.createElement('video');
                         newVideo.src = video.src;
@@ -164,6 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         newVideo.style.maxHeight = '90%';
                         lightboxContent.appendChild(newVideo);
                     } else if (img) {
+                        // Check if it's a mobile placeholder for video
                         const videoSrc = img.getAttribute('data-video-src');
                         if (videoSrc) {
                             const newVideo = document.createElement('video');
@@ -179,13 +172,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             lightboxContent.appendChild(newImg);
                         }
                     }
+                    
+                    document.body.appendChild(lightbox); // Re-append if removed
                     setTimeout(() => lightbox.classList.add('active'), 10);
-                }
+                });
             });
-
-            setTimeout(() => {
-                detailContainer.querySelectorAll('.reveal').forEach(r => r.classList.add('active'));
-            }, 100);
         } else {
             detailContainer.innerHTML = `
                 <div style="height: 50vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
