@@ -296,6 +296,17 @@ main {
     filter: grayscale(0%);
 }
 
+.card-media {
+    position: relative;
+}
+
+.card-image-placeholder {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: var(--bg-color);
+    display: block;
+}
+
 .card-overlay-text {
     position: absolute;
     top: 50%;
@@ -588,6 +599,17 @@ main {
     color: var(--accent-color);
 }
 
+
+/* 3D Page Specific Layout */
+.grid-3d {
+    column-count: 4 !important;
+}
+
+@media (max-width: 768px) {
+    .grid-3d {
+        column-count: 2 !important;
+    }
+}
 
 /* About Section */
 .about-section {

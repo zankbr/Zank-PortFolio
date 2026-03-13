@@ -11,14 +11,16 @@ document.addEventListener('DOMContentLoaded', () => {
             card.style.transitionDelay = `${index * 0.1}s`; // Staggered delay
             
             // Extract theme from placeholder URL (simple heuristic)
-            const isDark = project.cover.includes('/0000ff/') || 
-                          project.cover.includes('/1a1a1a/') || 
-                          project.cover.includes('/000000/') ||
-                          project.cover.includes('/333333/');
+            const coverStr = project.cover || '';
+            const isDark = coverStr.includes('/0000ff/') || 
+                          coverStr.includes('/1a1a1a/') || 
+                          coverStr.includes('/000000/') ||
+                          coverStr.includes('/333333/');
             card.setAttribute('data-theme', isDark ? 'dark' : 'light');
 
             // Check if it's a motion project with video files
             const isMotionProject = project.title === "动态视频";
+            const is3DProjectCard = project.category && project.category.includes('3D');
             const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             
             let coverImage = project.cover;
@@ -28,8 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             card.innerHTML = `
-                <div style="position: relative;">
-                    <img src="${coverImage}" alt="${project.title}" class="card-image">
+                <div class="card-media">
+                    ${is3DProjectCard ? `<div class="card-image-placeholder"></div>` : `<img src="${coverImage}" alt="${project.title}" class="card-image">`}
                     <div class="card-overlay-text">${project.coverTitle || project.title}</div>
                 </div>
                 <div class="card-info">
@@ -74,19 +76,75 @@ document.addEventListener('DOMContentLoaded', () => {
             // CSS column-count fills vertically (Col 1 -> Col 2 -> Col 3)
             // We want visual horizontal order (Item 1 -> Top Left, Item 2 -> Top Center/Right...)
             // So we need to distribute index 0, 3, 6 to Col 1; 1, 4, 7 to Col 2; etc.
-            const reorderedImages = [];
-            if (project.images && project.images.length > 0) {
-                // Distribute to columns buckets
-                const cols = Array.from({ length: columns }, () => []);
-                
-                project.images.forEach((img, index) => {
-                    cols[index % columns].push(img);
+            let reorderedImages = [];
+            
+            // 3D Project Specific Logic (Category === '3D')
+            const is3DProject = project.category && project.category.includes('3D');
+            
+            if (is3DProject) {
+                // For 3D project: Sort by filename number prefix (1-xxx, 2-xxx)
+                // This ensures "1-white" and "1-render" stay together
+                const sortedImages = [...project.images].sort((a, b) => {
+                    // Extract basename
+                    const nameA = a.split('/').pop();
+                    const nameB = b.split('/').pop();
+                    
+                    // Extract number prefix (e.g., "1" from "1-white.jpg")
+                    const numA = parseInt(nameA.match(/^(\d+)-/) ? nameA.match(/^(\d+)-/)[1] : 9999);
+                    const numB = parseInt(nameB.match(/^(\d+)-/) ? nameB.match(/^(\d+)-/)[1] : 9999);
+                    
+                    if (numA !== numB) return numA - numB;
+                    return nameA.localeCompare(nameB); // If numbers match, sort by name
                 });
                 
-                // Concatenate columns to match CSS flow order
-                cols.forEach(col => {
-                    reorderedImages.push(...col);
-                });
+                // For 3D PC layout, we use 4 columns (defined in CSS via .grid-3d)
+                // But we still need to distribute them for Masonry flow if we want horizontal order
+                // However, user asked to "ensure adjacent images stay together". 
+                // With column-count: 4, adjacent items in HTML flow vertically.
+                // If we want "1-white" and "1-render" to be side-by-side, we actually need horizontal flow logic.
+                // BUT, user instructions for 3D are: "ensure... tight together in array" + "PC layout 4 columns".
+                // If we use standard column-count, items flow down. So [1-white, 1-render, 2-white, 2-render]
+                // Col 1: 1-white... Col 2: ...
+                // If user wants PAIRS, maybe we shouldn't scramble them for masonry?
+                // User said: "按数字从小到大...确保数字相同的两张图...在数组中紧挨着"
+                // And: "PC端...4列...以便让“白模+成品”两组横向并排显示"
+                // This implies visual pairing. 
+                // Let's trust the sorted array order and the CSS columns. 
+                // If we use the previous masonry reordering logic on this sorted array, 
+                // index 0 (1-white) goes to Col 1, index 1 (1-render) goes to Col 2.
+                // This puts them side-by-side horizontally! Perfect.
+                
+                if (window.innerWidth >= 769) {
+                    columns = 4; // Override for PC 3D
+                }
+                
+                if (sortedImages.length > 0) {
+                    const cols = Array.from({ length: columns }, () => []);
+                    sortedImages.forEach((img, index) => {
+                        cols[index % columns].push(img);
+                    });
+                    cols.forEach(col => {
+                        reorderedImages.push(...col);
+                    });
+                } else {
+                    reorderedImages = [];
+                }
+                
+            } else {
+                // Standard Logic for other projects
+                if (project.images && project.images.length > 0) {
+                    // Distribute to columns buckets
+                    const cols = Array.from({ length: columns }, () => []);
+                    
+                    project.images.forEach((img, index) => {
+                        cols[index % columns].push(img);
+                    });
+                    
+                    // Concatenate columns to match CSS flow order
+                    cols.forEach(col => {
+                        reorderedImages.push(...col);
+                    });
+                }
             }
 
             detailContainer.innerHTML = `
@@ -98,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
 
                 <div class="detail-content reveal">
-                    <div class="detail-gallery">
+                    <div class="detail-gallery ${is3DProject ? 'grid-3d' : ''}">
                         ${reorderedImages.map(img => {
                             const isVideo = img.toLowerCase().endsWith('.mp4') || img.toLowerCase().endsWith('.webm');
                             const isGif = img.toLowerCase().endsWith('.gif');
